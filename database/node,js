@@ -1,0 +1,32 @@
+// server.js
+const express = require('express');
+const mongoose = require('mongoose');
+const Task = require('./models/Task');
+
+mongoose.connect('mongodb://localhost/todo_app', { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => console.log('Connected to MongoDB'))
+    .catch(err => console.error('Error connecting to MongoDB:', err));
+
+const app = express();
+app.use(express.json());
+
+app.get('/tasks', async (req, res) => {
+    const tasks = await Task.find();
+    res.json(tasks);
+});
+
+app.post('/tasks', async (req, res) => {
+    const { taskName } = req.body;
+    const task = new Task({ name: taskName });
+    await task.save();
+    res.status(201).json(task);
+});
+
+app.delete('/tasks/:id', async (req, res) => {
+    const { id } = req.params;
+    await Task.findByIdAndDelete(id);
+    res.sendStatus(204);
+});
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`Server listening on port ${PORT}`));

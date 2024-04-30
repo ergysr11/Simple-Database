@@ -1,0 +1,3 @@
+In this example, when a user adds a task through the frontend, it sends a POST request to the backend, which then adds the task to the MongoDB database. 
+Similarly, when a user marks a task as completed or deletes a task, it sends a corresponding request to the backend to update or delete the task in the database. 
+The frontend then reflects these changes in real-time.
